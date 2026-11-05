@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "catchmentwatch"
+version = "0.1.0"
+description = "Evidence-led flood situational awareness from open river and rainfall data"
+requires-python = ">=3.11"
+dependencies = ["fastapi>=0.110", "uvicorn[standard]>=0.27"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.setuptools.package-data]
+catchmentwatch = ["static/*"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

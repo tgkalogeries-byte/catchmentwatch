@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f4f5f2">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'">
+  <title>CatchmentWatch | Open data, operational context</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/"><span class="brand-mark">CW</span><span>CatchmentWatch<small>OPEN DATA / SITUATIONAL AWARENESS</small></span></a>
+    <div class="top-actions"><span id="updated" class="updated" aria-live="polite">Connecting to live sources…</span><button id="refresh" class="button" type="button">Refresh sources</button></div>
+  </header>
+  <main>
+    <section class="intro">
+      <div><div class="eyebrow">FIELD MONITORING / ENGLAND &amp; WALES</div><h1>See when signals converge.</h1><p>One view of Environment Agency alerts, river levels and nearby rainfall readings. Each reading links to its source record.</p></div>
+      <div class="scope"><b>What this is</b><p>An analyst’s snapshot for prioritising a closer look.</p><span>Not a forecast. Not an official warning.</span></div>
+    </section>
+    <div id="error-banner" class="error-banner" role="alert" hidden></div>
+    <section class="metrics" aria-label="Current feed summary">
+      <article class="metric"><span class="metric-label">EA flood alerts</span><strong id="alert-count">—</strong><span id="alert-status" class="metric-note">Waiting for source</span></article>
+      <article class="metric"><span class="metric-label">River gauges above typical range</span><strong id="high-count">—</strong><span id="water-status" class="metric-note">Waiting for source</span></article>
+      <article class="metric"><span class="metric-label">Latest water readings matched</span><strong id="water-count">—</strong><span class="metric-note">Gauge reading + station metadata</span></article>
+      <article class="metric"><span class="metric-label">Rainfall stations matched</span><strong id="rain-count">—</strong><span class="metric-note">Latest available observations</span></article>
+    </section>
+    <section class="signal-section">
+      <div class="section-heading"><div><div class="eyebrow">EVIDENCE QUEUE</div><h2>River gauges to review</h2></div><label class="search"><span>Filter</span><input id="filter" type="search" placeholder="Station, river, catchment" autocomplete="off"></label></div>
+      <div class="table-wrap"><table><caption class="sr-only">River station readings with reference ranges, nearest rainfall context and observation time</caption><thead><tr><th>Station</th><th>Catchment / river</th><th>Latest level</th><th>Reference band</th><th>Nearby rain context</th><th>Source time</th></tr></thead><tbody id="gauges"><tr><td colspan="6" class="empty">Loading live observations…</td></tr></tbody></table></div>
+      <p class="table-note">“Above typical range” compares the latest gauge value with that station’s Environment Agency typical-range high value. It is a screening cue, not a flood threshold. Nearby rainfall is linked by straight-line distance and may come from a different hydrological catchment.</p>
+    </section>
+    <section class="signal-section alerts-section">
+      <div class="section-heading"><div><div class="eyebrow">OFFICIAL SOURCE FEED</div><h2>Current flood alerts and warnings</h2></div><span class="live-tag"><i></i> Environment Agency API</span></div>
+      <div id="alerts" class="alerts-list"><div class="empty">Loading official alert feed…</div></div>
+    </section>
+    <section class="method-grid">
+      <article><div class="eyebrow">HOW TO READ THIS</div><h3>Signals first. Conclusions later.</h3><p>A gauge outside its usual range can justify checking the source and local context. It does not establish that flooding is occurring. Official Environment Agency alerts remain clearly separate from our own screening cues.</p></article>
+      <article><div class="eyebrow">NEXT ANALYTICAL STEP</div><h3>Test whether signals lead events.</h3><p>The next version can backtest rainfall-to-river level changes against archived observations, measure lead time and false alarms, then display an evidence trail for each candidate signal.</p></article>
+      <article><div class="eyebrow">DATA LIMITS</div><h3>Coverage and latency vary.</h3><p>Feeds update at different rates, some readings are missing, and nearby sensors are not necessarily upstream or in the same catchment. The API is beta and is not a safety-critical service.</p></article>
+    </section>
+  </main>
+  <footer><span>CatchmentWatch · portfolio prototype</span><a href="https://environment.data.gov.uk/flood-monitoring/doc/reference" target="_blank" rel="noreferrer">Environment Agency API documentation ↗</a></footer>
+  <script src="/assets/app.js" defer></script>
+</body>
+</html>
