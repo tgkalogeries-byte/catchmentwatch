@@ -12,8 +12,9 @@ Operational teams often work across separate alert and monitoring feeds. Catchme
 - What the nearest available rainfall monitor reports, how far away it is, and when that reading was observed.
 - Which official flood alerts and warnings the Environment Agency API currently returns.
 - Which feeds failed and how many readings were successfully matched.
+- For a selected station pair, the hourly rainfall/river-level series, a 1–12 hour lag candidate selected on the earlier 70% of the window, and its correlation in the later 30% holdout. Training pairs are kept entirely before the time split so future level readings cannot leak into candidate selection.
 
-The nearest rain gauge is chosen by straight-line distance. That is context only; it does not prove the rain gauge and river station share a catchment or that rainfall caused a river-level change. “Above typical range” is not an official flood threshold. This prototype does not forecast floods, estimate property risk, or replace official warnings and emergency procedures.
+The nearest rain gauge is chosen by straight-line distance. That is context only; it does not prove the rain gauge and river station share a catchment or that rainfall caused a river-level change. The lag scan selects a positive 1–12 hour training-period correlation, then checks it against later observations. A candidate must have a holdout correlation of at least 0.20 and improve by at least 0.10 over a same-hour baseline to pass the app's transparent screening rules. These cut-offs are practical filters, not significance tests. They do not establish predictive skill; correlations remain vulnerable to temporal dependence and the lag search involves multiple comparisons. In the live sample checked on 5 November 2026 (station 4203 with nearby rainfall station 4163), the chosen one-hour lag had training r≈0.56 but holdout r≈0.06, below the screening rules. That is weak evidence and does not establish a useful or repeatable signal. “Above typical range” is not an official flood threshold. This prototype does not forecast floods, estimate property risk, or replace official warnings and emergency procedures.
 
 ## Data source
 
@@ -38,7 +39,7 @@ Open <http://127.0.0.1:8000>. The API snapshot is cached for ten minutes; use **
 - `main.py` exposes a small HTTP API with a short in-memory cache.
 - `static/` renders an evidence-first dashboard with search, source timestamps and explicit limits.
 
-The next analytical milestone is a historical backtest: join archived rainfall and river readings by station and time, measure how often a rainfall change precedes a level rise, quantify useful lead time and false alerts, and show the source records behind every candidate. I would only describe a predictive alert after it performs reliably on held-out periods and across multiple catchments.
+The next analytical milestone is a historical backtest: evaluate the lag scan on archived periods, compare it with simple baselines, and measure stability across multiple catchments before making any predictive claim.
 
 ## Skills demonstrated
 
@@ -54,4 +55,4 @@ CatchmentWatch is relevant to data analyst, data science, software engineering, 
 
 ## Status
 
-Unpublished portfolio prototype. It depends on live network access to the Environment Agency API and is not intended for emergency or safety-critical decisions.
+Published portfolio prototype. It depends on live network access to the Environment Agency API and is not intended for emergency or safety-critical decisions.

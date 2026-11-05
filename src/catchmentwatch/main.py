@@ -5,9 +5,10 @@ from pathlib import Path
 from threading import Lock
 import time
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse
 
+from .analysis import analyze_pair
 from .sources import snapshot
 
 
@@ -45,3 +46,13 @@ def get_snapshot(refresh: bool = False) -> dict:
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok", "utc": datetime.now(timezone.utc).isoformat()}
+
+
+@app.get("/api/pair-analysis")
+def pair_analysis(level_station: str = Query(min_length=1, max_length=16), rain_station: str = Query(min_length=1, max_length=16), days: int = Query(30, ge=7, le=30)) -> dict:
+    try:
+        return analyze_pair(level_station, rain_station, days)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"Environment Agency history unavailable: {type(exc).__name__}") from exc

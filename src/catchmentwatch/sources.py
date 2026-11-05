@@ -89,7 +89,7 @@ def snapshot() -> dict[str, Any]:
     feeds: dict[str, Any] = {}
 
     try:
-        level_stations = fetch_items("id/stations", {"parameter": "level", "_view": "full"}, limit=500)
+        level_stations = fetch_items("id/stations", {"parameter": "level", "_view": "full"}, limit=10000)
         level_readings = fetch_items("data/readings", {"latest": "", "parameter": "level"}, limit=20000)
         level_station_by_measure = {
             measure.get("@id"): station
@@ -110,7 +110,7 @@ def snapshot() -> dict[str, Any]:
         feeds["water"] = {"status": "unavailable", "stations_returned": 0, "readings_matched": 0}
 
     try:
-        rain_stations = fetch_items("id/stations", {"parameter": "rainfall", "_view": "full"}, limit=500)
+        rain_stations = fetch_items("id/stations", {"parameter": "rainfall", "_view": "full"}, limit=10000)
         rain_readings = fetch_items("data/readings", {"latest": "", "parameter": "rainfall"}, limit=20000)
         rain_station_by_measure = {
             measure.get("@id"): station
